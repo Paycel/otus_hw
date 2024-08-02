@@ -49,14 +49,37 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
-	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+	t.Run("cache size check", func(t *testing.T) {
+		cache := NewCache(2)
+		cache.Set("key1", 1)
+		cache.Set("key2", 2)
+		cache.Set("key3", 3)
+		_, exist := cache.Get("key1")
+		require.False(t, exist)
+	})
+
+	t.Run("unused element deletion", func(t *testing.T) {
+		cache := NewCache(3)
+		cache.Set("key1", 1)
+		cache.Set("key2", 2)
+		cache.Set("key3", 3)
+
+		cache.Get("key1")
+		cache.Set("key2", 22)
+		cache.Set("key1", 11)
+		cache.Get("key1")
+		cache.Get("key1")
+		cache.Set("key1", 111)
+		cache.Get("key2")
+
+		cache.Set("key4", 4)
+		_, exist := cache.Get("key3")
+		require.False(t, exist)
 	})
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
-
+	t.Parallel()
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}
 	wg.Add(2)
