@@ -48,4 +48,18 @@ func TestList(t *testing.T) {
 		}
 		require.Equal(t, []int{70, 80, 60, 40, 10, 30, 50}, elems)
 	})
+
+	t.Run("replacing in list", func(t *testing.T) {
+		l := NewList()
+		one := l.PushBack(1)
+		two := l.PushBack(2)
+		three := l.PushBack(3)
+
+		l.MoveToFront(two)
+		require.Equal(t, l.Front(), two)
+
+		l.MoveToFront(three)
+		require.Equal(t, l.Front(), three)
+		require.Equal(t, l.Back(), one)
+	})
 }
