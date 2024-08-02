@@ -74,7 +74,6 @@ func worker(ctx context.Context, tasks <-chan Task, wg *sync.WaitGroup, errChan 
 				return
 			case errChan <- task():
 			}
-
 		}
 	}
 }
