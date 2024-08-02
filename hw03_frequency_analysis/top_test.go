@@ -7,9 +7,9 @@ import (
 )
 
 // Change to true if needed.
-var taskWithAsteriskIsCompleted = false
+const taskWithAsteriskIsCompleted = false
 
-var text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
+const text = `Как видите, он  спускается  по  лестнице  вслед  за  своим
 	другом   Кристофером   Робином,   головой   вниз,  пересчитывая
 	ступеньки собственным затылком:  бум-бум-бум.  Другого  способа
 	сходить  с  лестницы  он  пока  не  знает.  Иногда ему, правда,
@@ -43,12 +43,19 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
+const text2 = `Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, 
+there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics,
+a large language ocean. A small river named Duden flows by their place and supplies it with the necessary 
+regelialia.`
+
+const text3 = `bca bcc bac abc acb 123 chv aaa vjf aaa bac abc acb bca bcc bac abc acb 123 long first`
+
 func TestTop10(t *testing.T) {
 	t.Run("no words in empty string", func(t *testing.T) {
 		require.Len(t, Top10(""), 0)
 	})
 
-	t.Run("positive test", func(t *testing.T) {
+	t.Run("positive test 1", func(t *testing.T) {
 		if taskWithAsteriskIsCompleted {
 			expected := []string{
 				"а",         // 8
@@ -78,5 +85,37 @@ func TestTop10(t *testing.T) {
 			}
 			require.Equal(t, expected, Top10(text))
 		}
+	})
+
+	t.Run("positive test 2", func(t *testing.T) {
+		expected := []string{
+			"the",            // 6
+			"and",            // 2
+			"far",            // 2
+			"live",           // 2
+			"A",              // 1
+			"Bookmarksgrove", // 1
+			"Consonantia,",   // 1
+			"Duden",          // 1
+			"Far",            // 1
+			"Semantics,",     // 1
+		}
+		require.Equal(t, expected, Top10(text2))
+	})
+
+	t.Run("semantic sort test", func(t *testing.T) {
+		expected := []string{
+			"abc",   // 3
+			"acb",   // 3
+			"bac",   // 3
+			"123",   // 2
+			"aaa",   // 2
+			"bca",   // 2
+			"bcc",   // 2
+			"chv",   // 1
+			"first", // 1
+			"long",  // 1
+		}
+		require.Equal(t, expected, Top10(text3))
 	})
 }
